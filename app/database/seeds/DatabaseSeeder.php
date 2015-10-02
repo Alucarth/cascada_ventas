@@ -9,14 +9,11 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
 	{
-		Eloquent::unguard();
+		    Eloquent::unguard();
+ 
+    	// Add or Uncomment this line
+    		$this->call('UserTableSeeder');
 
-		User::create(array(
-			'name' => 'admin',
-			'username'=>'admin',
-			'email' => 'info@emizor.com',
-			'password' => '123456'
-		));
 		
 	}
 

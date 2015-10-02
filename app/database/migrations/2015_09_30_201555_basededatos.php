@@ -124,6 +124,7 @@ class Basededatos extends Migration {
 
             $t->foreign('sale_id')->references('id')->on('sales');                                  
         });
+        
 	}
 
 	/**

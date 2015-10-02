@@ -11,9 +11,21 @@
 |
 */
 
-Route::get('/', function()
+// Route::get('/', function()
+// {
+// 	return View::make('hello');
+// });
+
+Route::get('/authtest', array('before' => 'auth.basic', function()
 {
-	return View::make('hello');
+    return View::make('hello');
+}));
+Route::group(array('prefix' => 'api/v1', 'before' => 'auth.basic'), function()
+{
+    Route::resource('url', 'UrlController');
 });
 
 Route::resource('ventas', 'SaleController');
+// Route::resource('url', 'UrlController');
+
+?>
