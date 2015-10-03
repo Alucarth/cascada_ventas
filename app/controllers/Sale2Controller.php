@@ -1,8 +1,8 @@
 <?php
 
-class SaleController extends \BaseController {
+class SaleController2 extends \BaseController {
 	public function index(){
-		return "index asdasdasd";
+		return "index assssssssss";
 	}
 	public function store(){
 

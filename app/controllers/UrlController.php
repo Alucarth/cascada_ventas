@@ -39,14 +39,12 @@ class UrlController extends \BaseController {
 	 */
 	public function store()
 	{
-	    $url = new Url;
+	    $url = new Url();
 	    $url->url = Request::get('url');
 	    $url->description = Request::get('description');
 	    $url->user_id = Auth::user()->id;
 	 
-	    // Validation and Filtering is sorely needed!!
-	    // Seriously, I'm a bad person for leaving that out.
-	 
+
 	    $url->save();
 	 
 	    return Response::json(array(
@@ -111,7 +109,15 @@ class UrlController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		    $url = Url::where('user_id', Auth::user()->id)->find($id);
+ 
+    $url->delete();
+ 
+    return Response::json(array(
+        'error' => false,
+        'message' => 'url deleted'),
+        200
+        );
 	}
 
 
