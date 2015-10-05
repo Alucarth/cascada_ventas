@@ -37,29 +37,27 @@ class SaleController extends \BaseController {
 		$respuesta = array();
     	//$input =  $this->setDataOffline();
     	$input = Request::get('ventas');
-    	
-    	$url = new Url();
-	    $url->url = "www.nada.com";
-	    $url->description = $input;	    
-	    $url->save();
 
     	$input = json_decode($input);
-    	
-    	
-
+    	$new_data = array();
+    	   
     	foreach ($input as $key => $venta) {    		
-    		$this->saveSale($venta);	    		
-    		array_push($respuesta, $venta->invoice_number);  		
+    		$this->saveSale($venta);	//unable this line to no save into database     
+    		array_push($respuesta, $venta->invoice_number); 
+    		if($this->getClientId($venta->client_id) == "1")
+    		{
+    			$venta->client_id = $this->clientId($venta->client_id);
+    			array_push($new_data, $venta);    		    	
+    		}
     	}
     	
-
+    	return Response::json($new_data);
     	
 		return Response::json(array(
 	        'error' => false,
-	        'respuesta' => $$respuesta),
+	        'respuesta' => $respuesta),
 	        200
 	    );
-
 	}
 
 
@@ -162,21 +160,7 @@ class SaleController extends \BaseController {
 		return $datos;
     }	
 
-    public function saveSales(){    		   
-	    // return Response::json(array(
-	    //     'error' => false,
-	    //     'urls' => $urls->toArray()),
-	    //     200
-	    // );
-
-
-//     	$myfile = fopen("proofasdasdas.txt", "w") or die("Unable to open file!");
-// 		$txt = "datos\n";
-// 		fwrite($myfile, $txt);
-// 		$txt = "datos\n";
-// 		fwrite($myfile, $txt);
-// 		fclose($myfile);
-// return 2;
+    public function saveSales(){    		   	    
     	$respuesta = array();
     	//$input =  $this->setDataOffline();
     	$input = Request::get('ventas');
@@ -185,11 +169,7 @@ class SaleController extends \BaseController {
 	    $url->url = 'www.nada.com';
 	    $url->description = Request::get($input);	    
 	    $url->save();
-
-    	$input = json_decode($input);
-    	
-    	
-
+    	$input = json_decode($input);    	
     	foreach ($input as $key => $venta) {    		
     		$this->saveSale($venta);	    		
     		array_push($respuesta, $venta->invoice_number);  		
@@ -205,7 +185,7 @@ class SaleController extends \BaseController {
 
 		$input = $venta;		
 		$numero =(int) $input->invoice_number;
-		$client_id = $input->client_id;		
+		$client_id = $this->clientId($input->client_id);		
 		$user_id = $input->user_id;
     	$items = $input->invoice_items;    	
     	$amount = 0;
@@ -333,4 +313,11 @@ class SaleController extends \BaseController {
     	}           
     }
 
+    private function getClientId($id)
+	{
+		return substr($id, -1);
+	}
+	private function clientId($cad){
+    	return substr($cad, 0, -1);
+    }
 }
